@@ -1,0 +1,28 @@
+td.original {
+    padding: 0 !important;
+    max-width: 0;
+    width: 0;
+}
+td.original > p {
+    display: none;
+}
+body .inline-group .tabular tr.has_original td {
+    padding-top: 8px;
+}
+
+.change-form .form-row .simple-code-block {
+    margin: -10px 0 3px 0;
+    background: #fcfcfc;
+    border: 1px solid #eee;
+    padding: 10px 8px;
+    display: inline-block;
+    max-height: 500px;
+    width: 900px;
+    overflow: scroll;
+}
+
+/* Hide order fields for sortable inlines */
+.ui-sortable > thead > tr > .djn-th.order,
+.ui-sortable > tbody > tr > .djn-td.field-order {
+    display: none;
+}

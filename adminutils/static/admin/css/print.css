@@ -1,0 +1,56 @@
+#content {
+	padding: 0;
+}
+
+@media print {  
+	@page {
+		size: 297mm 210mm;
+		margin: 12mm 9mm;
+	}
+}
+
+#user-tools,
+#toolbar,
+.object-tools,
+.breadcrumbs,
+.action-checkbox-column,
+.action-checkbox,
+#content > h1,
+#changelist-filter,
+#changelist .actions {
+	display: none;
+}
+
+.change-list .filtered .results,
+.change-list .filtered .paginator,
+.filtered #toolbar,
+.filtered div.xfull {
+	margin-right: 0 !important;
+}
+
+#changelist table thead th {
+	white-space: wrap !important;
+}
+
+.field-picture_list_preview div {
+	border: 0 !important;
+	border-radius: 0 !important;
+}
+.field-picture_list_preview div img {
+	border-radius: 0 !important;
+	max-width: 15mm;
+}
+
+#header {
+	background: none;
+	padding: 0;
+	padding-bottom: 5mm;
+}
+#header a {
+	color: #000 !important;
+}
+
+.field-email_addresses_list,
+.field-phone_numbers_list {
+	font-size: 9px;
+}
