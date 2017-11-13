@@ -15,9 +15,12 @@ def styledict(styles):
 
 
 def boolean_icon_with_text(flag, text):
-    return mark_safe('{} {}'.format(
+    return mark_safe('''
+        <div style="float:left">{}</div>
+        <div style="float:left; padding-left: 8px;">{}</div>
+    '''.format(
         _boolean_icon(flag),
-        html.escape(text),
+        html.conditional_escape(text),
     ))
 
 
