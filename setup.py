@@ -135,19 +135,21 @@ class Setup(object):
 
 Setup.test_links()
 
-setup(name=PACKAGE_NAME,
-      version=Setup.version(),
-      author=Setup.author(),
-      author_email=Setup.email(),
-      include_package_data=True,
-      zip_safe=False,
-      url=Setup.url(),
-      license=Setup.license(),
-      packages=find_packages(),
-      package_dir={PACKAGE: PACKAGE},
-      description=DESCRIPTION,
-      install_requires=Setup.requirements('requirements.txt'),
-      extras_require=Setup.extra_requirements('requirements-*.txt'),
-      long_description=Setup.longdesc(),
-      entry_points=Setup.read('entry-points.ini', True),
-      classifiers=CLASSIFIERS)
+setup(
+    name=PACKAGE_NAME,
+    version=Setup.version(),
+    author=Setup.author(),
+    author_email=Setup.email(),
+    include_package_data=True,
+    zip_safe=False,
+    url=Setup.url(),
+    license=Setup.license(),
+    packages=find_packages(),
+    package_dir={PACKAGE: PACKAGE},
+    description=DESCRIPTION,
+    install_requires=Setup.requirements('requirements.txt'),
+    extras_require=Setup.extra_requirements('requirements-*.txt'),
+    long_description=Setup.longdesc(),
+    entry_points=Setup.read('entry-points.ini', True),
+    classifiers=CLASSIFIERS,
+)

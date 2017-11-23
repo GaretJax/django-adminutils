@@ -17,7 +17,7 @@ from .widgets import (
 )
 
 
-__version__ = '0.0.1'
+__version__ = '0.0.3'
 __url__ = 'https://github.com/GaretJax/django-adminutils'
 __author__ = 'Jonathan Stoppani'
 __email__ = 'jonathan@stoppani.name'
@@ -82,6 +82,27 @@ class AdminURLFieldWidget(django_admin_widgets.AdminURLFieldWidget):
                 markup, _('Currently:'), flatatt(final_attrs), value,
             )
         return markup
+
+
+class CreationFormAdminMixin(object):
+    creation_fieldsets = None
+    creation_readonly_fields = None
+    creation_form = None
+
+    def get_fieldsets(self, request, obj=None):
+        if obj is None and self.creation_fieldsets is not None:
+            return self.creation_fieldsets
+        return super().get_fieldsets(request, obj)
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj is None and self.creation_readonly_fields is not None:
+            return self.creation_readonly_fields
+        return super().get_readonly_fields(request, obj)
+
+    def get_form(self, request, obj=None, **kwargs):
+        if obj is None and self.creation_form is not None:
+            kwargs['form'] = self.creation_form
+        return super().get_form(request, obj, **kwargs)
 
 
 class ModelAdmin(DjangoObjectActions, admin.ModelAdmin):
