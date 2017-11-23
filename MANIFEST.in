@@ -1,0 +1,15 @@
+include HISTORY.rst
+include LICENSE
+include README.rst
+
+include requirements.txt
+
+exclude .coveragerc
+exclude .travis.yml
+exclude tox.ini
+
+graft adminutils/static
+graft adminutils/templates
+
+prune docs
+prune djclick/test
