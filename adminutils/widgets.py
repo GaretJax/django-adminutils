@@ -3,7 +3,7 @@ import six
 from django.contrib.admin.templatetags.admin_list import _boolean_icon
 from django.utils import html
 from django.utils.safestring import mark_safe
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 
 def simple_code_block(code):

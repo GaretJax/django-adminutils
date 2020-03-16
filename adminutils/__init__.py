@@ -1,7 +1,6 @@
 from django.forms.utils import flatatt
 from django.contrib import admin
 from django.contrib.admin import widgets as django_admin_widgets
-from django.db.models import URLField
 from django.utils import html
 from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
@@ -9,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from django_object_actions import DjangoObjectActions
 
 from .decorators import options
-from .actions import queryset_action, object_action
+from .actions import queryset_action, object_action, form_processing_action
 from .widgets import (
     simple_code_block,
     admin_detail_link,
@@ -17,14 +16,14 @@ from .widgets import (
 )
 
 
-__version__ = '0.0.4'
+__version__ = '0.0.5'
 __url__ = 'https://github.com/GaretJax/django-adminutils'
 __author__ = 'Jonathan Stoppani'
 __email__ = 'jonathan@stoppani.name'
 __license__ = 'MIT'
 __all__ = [
     'options', 'queryset_action', 'simple_code_block', 'object_action',
-    'ModelAdmin', 'boolean_icon_with_text',
+    'ModelAdmin', 'boolean_icon_with_text', 'form_processing_action',
 ]
 
 
@@ -106,10 +105,6 @@ class CreationFormAdminMixin(object):
 
 
 class ModelAdmin(DjangoObjectActions, admin.ModelAdmin):
-    formfield_overrides = {
-        URLField: {'widget': AdminURLFieldWidget},
-    }
-
     class Media:
         css = {
             'all': (
