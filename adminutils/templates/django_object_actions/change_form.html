@@ -9,18 +9,28 @@
 
 
 {% block object-tools-items %}
-    {% for tool in objectactions %}
-        <li class="objectaction-item" data-tool-name="{{ tool.name }}">
-            <form action="{% url tools_view_name pk=object_id tool=tool.name %}" method="post">
-                {% csrf_token %}
-                <button class="btn {{ tool.standard_attrs.class }}"
-                    title="{{ tool.standard_attrs.title }}"
-                    type="submit"
-                    {% for k, v in tool.custom_attrs.items %}
-                        {{ k }}="{{ v }}"
-                    {% endfor %}>{{ tool.label|capfirst }}</button>
-            </form>
-        </li>
-    {% endfor %}
-    {{ block.super }}
+  {% for tool in objectactions %}
+    <li class="objectaction-item" data-tool-name="{{ tool.name }}">
+      {% if tool.custom_attrs.use_form|default_if_none:True %}
+        <form action="{% url tools_view_name pk=object_id tool=tool.name %}" method="post" style="padding: 0; margin: 0;">
+          {% csrf_token %}
+          <button class="btn {{ tool.standard_attrs.class }}"
+              title="{{ tool.standard_attrs.title }}"
+              type="submit"
+              {% for k, v in tool.custom_attrs.items %}
+                  {{ k }}="{{ v }}"
+              {% endfor %}>{{ tool.label|capfirst }}</button>
+        </form>
+      {% else %}
+        <a href='{% url tools_view_name pk=object_id tool=tool.name %}' title="{{ tool.standard_attrs.title }}"
+            {% for k, v in tool.custom_attrs.items %}
+              {{ k }}="{{ v }}"
+            {% endfor %}
+            class="{{ tool.standard_attrs.class }}">
+          {{ tool.label|capfirst }}
+        </a>
+      {% endif %}
+    </li>
+  {% endfor %}
+  {{ block.super }}
 {% endblock %}

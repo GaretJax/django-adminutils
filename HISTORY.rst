@@ -2,6 +2,26 @@
 History
 =======
 
+0.0.7 - 2020-03-16
+==================
+
+* Added a generic form processing action
+* Add an option to not use forms to submit actions
+* Compatibility with Django 2
+
+
+0.0.6 - 2017-12-02
+==================
+
+* Initial python 2 backport.
+
+
+0.0.5 - 2017-12-02
+==================
+
+* Make easy_thumbnails an optional dependency.
+
+
 0.0.4 - 2017-11-23
 ==================
 
