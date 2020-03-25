@@ -2,6 +2,12 @@
 History
 =======
 
+0.0.8 - 2017-12-02
+==================
+
+* Make easy_thumbnails an optional dependency, again.
+
+
 0.0.7 - 2020-03-16
 ==================
 

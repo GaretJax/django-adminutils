@@ -1,4 +1,3 @@
 django-object-actions
 six
 django
-easy_thumbnails
