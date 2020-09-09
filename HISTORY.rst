@@ -2,6 +2,11 @@
 History
 =======
 
+0.0.10 - 2020-09-09
+===================
+
+* Remove AdminURLFieldWidget which has meanwhile been released upstream.
+
 
 0.0.9 - 2020-09-09
 ==================

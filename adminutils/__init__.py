@@ -1,7 +1,6 @@
 from django.forms.utils import flatatt
 from django.contrib import admin
 from django.contrib.admin import widgets as django_admin_widgets
-from django.db.models import URLField
 from django.utils import html
 from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
@@ -17,7 +16,7 @@ from .widgets import (
 )
 
 
-__version__ = "0.0.9"
+__version__ = "0.0.10"
 __url__ = "https://github.com/GaretJax/django-adminutils"
 __author__ = "Jonathan Stoppani"
 __email__ = "jonathan@stoppani.name"
@@ -76,30 +75,6 @@ def linked_inline(attribute_name, short_description=None):
     return getter
 
 
-class AdminURLFieldWidget(django_admin_widgets.AdminURLFieldWidget):
-    def __init__(self, attrs=None):
-        final_attrs = {"class": "vURLField"}
-        if attrs is not None:
-            final_attrs.update(attrs)
-        super(AdminURLFieldWidget, self).__init__(attrs=final_attrs)
-
-    def render(self, name, value, attrs=None):
-        markup = super(django_admin_widgets.AdminURLFieldWidget, self).render(
-            name, value, attrs
-        )
-        if value:
-            value = force_text(self._format_value(value))
-            final_attrs = {"href": html.smart_urlquote(value)}
-            markup = html.format_html(
-                '<p class="url">{}<br />{} <a{}>{}</a></p>',
-                markup,
-                _("Currently:"),
-                flatatt(final_attrs),
-                value,
-            )
-        return markup
-
-
 class CreationFormAdminMixin(object):
     creation_fieldsets = None
     creation_readonly_fields = None
@@ -126,10 +101,6 @@ class CreationFormAdminMixin(object):
 
 
 class ModelAdmin(DjangoObjectActions, admin.ModelAdmin):
-    formfield_overrides = {
-        URLField: {"widget": AdminURLFieldWidget},
-    }
-
     class Media:
         css = {
             "all": ("admin/css/overrides.css",),
