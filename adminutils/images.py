@@ -1,5 +1,6 @@
 from django.utils.html import format_html
 
+
 try:
     from easy_thumbnails.files import get_thumbnailer
 except ImportError:
@@ -24,7 +25,12 @@ def simple_thumbnail(
         url = image_or_url
     else:
         thumbnailer = get_thumbnailer(image_or_url, relname)
-        thumbnail = thumbnailer.get_thumbnail({"size": size, "crop": crop,})
+        thumbnail = thumbnailer.get_thumbnail(
+            {
+                "size": size,
+                "crop": crop,
+            }
+        )
         url = thumbnail.url
         size = (thumbnail.width, thumbnail.height)
 
@@ -64,3 +70,26 @@ def round_thumbnail(image_or_url, size, **kwargs):
         "border-radius": "{}px".format(radius),
     }
     return simple_thumbnail(image_or_url, size, **kwargs)
+
+
+def field_getter_factory(func):
+    def factory(attribute_name, short_description=None, **kwargs):
+        def getter(self, obj):
+            for attr in attribute_name.split("__"):
+                obj = getattr(obj, attr)
+            return func(obj, **kwargs)
+
+        if short_description is None:
+            short_description = attribute_name.replace("__", " ").replace(
+                "_", " "
+            )
+        getter.short_description = short_description
+        getter.admin_order_field = attribute_name
+        return getter
+
+    return factory
+
+
+@field_getter_factory
+def image_preview(value, *, size, crop):
+    return simple_thumbnail(value, size, crop=crop) if value else "-"

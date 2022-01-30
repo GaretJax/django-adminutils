@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
+import glob
 import io
 import os
 import re
 import sys
-import glob
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 
 PACKAGE = "adminutils"
@@ -18,10 +18,7 @@ CLASSIFIERS = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 2.7",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.3",
-    "Programming Language :: Python :: 3.4",
 ]
 
 
@@ -41,7 +38,7 @@ class Setup(object):
             filepath = os.path.join(os.path.dirname(__file__), fname)
             with io.open(filepath, "rt", encoding="utf8") as f:
                 return f.read()
-        except:
+        except Exception:
             if not fail_silently:
                 raise
             return ""
@@ -88,7 +85,7 @@ class Setup(object):
     def get_metavar(name):
         data = Setup.read(os.path.join(PACKAGE, "__init__.py"))
         value = (
-            re.search(u'__{}__\s*=\s*u?"([^"]+)"'.format(name), data)
+            re.search(r'__{}__\s*=\s*u?"([^"]+)"'.format(name), data)
             .group(1)
             .strip()
         )

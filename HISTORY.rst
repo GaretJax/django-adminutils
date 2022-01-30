@@ -2,6 +2,17 @@
 History
 =======
 
+0.0.11 - 2022-01-30
+===================
+
+* Drop support for Python 2.7.
+* Support Django 4.
+* Dropped six dependency.
+* Added ``pop_fields``, ``EditOnlyInlineMixin``, ``image_preview``, and
+  ``formatted_json`` utilities.
+* Code linting with black and isort
+
+
 0.0.10 - 2020-09-09
 ===================
 

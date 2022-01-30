@@ -2,8 +2,7 @@ import functools
 
 from django import http
 from django.db import transaction
-from django.shortcuts import render, redirect
-
+from django.shortcuts import redirect, render
 from django_object_actions import takes_instance_or_queryset
 
 

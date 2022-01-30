@@ -1,3 +1,2 @@
 django-object-actions
-six
 django

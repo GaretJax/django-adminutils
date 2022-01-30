@@ -1,8 +1,10 @@
-import six
+import json
 
 from django.contrib.admin.templatetags.admin_list import _boolean_icon
+from django.core.serializers.json import DjangoJSONEncoder
 from django.utils import html
 from django.utils.safestring import mark_safe
+
 
 try:
     from django.urls import reverse
@@ -24,7 +26,8 @@ def boolean_icon_with_text(flag, text):
         <div style="float:left">{}</div>
         <div style="float:left; padding-left: 8px;">{}</div>
     """.format(
-            _boolean_icon(flag), html.conditional_escape(text),
+            _boolean_icon(flag),
+            html.conditional_escape(text),
         )
     )
 
@@ -34,6 +37,10 @@ def html_list(items):
         "\n", "<li>{}</li>", ((str(o),) for o in items)
     )
     return mark_safe("<ul>{items}</ul>".format(items=items))
+
+
+def formatted_json(data):
+    return simple_code_block(json.dumps(data, cls=DjangoJSONEncoder, indent=2))
 
 
 def admin_detail_link(instance, text=None, bold=False):
@@ -46,6 +53,6 @@ def admin_detail_link(instance, text=None, bold=False):
         ),
         args=(instance.pk,),
     )
-    text = six.text_type(instance) if text is None else text
+    text = str(instance) if text is None else text
     style = "font-weight: bold;" if bold else ""
     return html.format_html('<a href="{}" style="{}">{}</a>', url, style, text)

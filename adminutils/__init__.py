@@ -1,22 +1,20 @@
-from django.forms.utils import flatatt
-from django.contrib import admin
-from django.contrib.admin import widgets as django_admin_widgets
-from django.utils import html
-from django.utils.encoding import force_text
-from django.utils.translation import ugettext_lazy as _
+import copy
 
+from django.contrib import admin
 from django_object_actions import DjangoObjectActions
 
+from .actions import form_processing_action, object_action, queryset_action
 from .decorators import options
-from .actions import queryset_action, object_action, form_processing_action
 from .widgets import (
-    simple_code_block,
     admin_detail_link,
     boolean_icon_with_text,
+    formatted_json,
+    html_list,
+    simple_code_block,
 )
 
 
-__version__ = "0.0.10"
+__version__ = "0.0.11"
 __url__ = "https://github.com/GaretJax/django-adminutils"
 __author__ = "Jonathan Stoppani"
 __email__ = "jonathan@stoppani.name"
@@ -29,17 +27,11 @@ __all__ = [
     "ModelAdmin",
     "boolean_icon_with_text",
     "form_processing_action",
+    "formatted_json",
+    "html_list",
 ]
 
 
-# class EditOnlyInlineMixin:
-#     can_delete = False
-#     extra = 0
-#
-#     def has_add_permission(self, request):
-#         return False
-#
-#
 def linked_relation(
     attribute_name, label_attribute=None, short_description=None
 ):
@@ -75,6 +67,13 @@ def linked_inline(attribute_name, short_description=None):
     return getter
 
 
+def pop_fields(fieldsets, fields):
+    fieldsets = copy.deepcopy(fieldsets)
+    for label, spec in fieldsets:
+        spec["fields"] = [f for f in spec["fields"] if f not in fields]
+    return fieldsets
+
+
 class CreationFormAdminMixin(object):
     creation_fieldsets = None
     creation_readonly_fields = None
@@ -98,6 +97,14 @@ class CreationFormAdminMixin(object):
         return super(CreationFormAdminMixin, self).get_form(
             request, obj, **kwargs
         )
+
+
+class EditOnlyInlineMixin:
+    can_delete = False
+    extra = 0
+
+    def has_add_permission(self, request, obj=None):
+        return False
 
 
 class ModelAdmin(DjangoObjectActions, admin.ModelAdmin):
