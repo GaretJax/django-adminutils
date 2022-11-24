@@ -7,6 +7,8 @@ Upcoming
 
 * Support custom action in ``admin_detail_link``.
 * Use date widget also in DateRange fields.
+* Do not raise an error if ``easy_thumbnails`` is not installed and it is not
+  used.
 
 
 0.0.11 - 2022-01-30

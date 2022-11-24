@@ -1,13 +1,5 @@
 from django.utils.html import format_html
 
-
-try:
-    from easy_thumbnails.files import get_thumbnailer
-except ImportError:
-    raise ImportError(
-        "Please install easy_thumbnails to use the adminutils.images module."
-    )
-
 from .widgets import styledict
 
 
@@ -24,6 +16,14 @@ def simple_thumbnail(
     if isinstance(image_or_url, str):
         url = image_or_url
     else:
+        try:
+            from easy_thumbnails.files import get_thumbnailer
+        except ImportError:
+            raise ImportError(
+                "Please install easy_thumbnails to use the "
+                "adminutils.images module."
+            )
+
         thumbnailer = get_thumbnailer(image_or_url, relname)
         thumbnail = thumbnailer.get_thumbnail(
             {
