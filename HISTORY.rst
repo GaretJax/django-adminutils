@@ -10,6 +10,7 @@ Upcoming
 * Do not raise an error if ``easy_thumbnails`` is not installed and it is not
   used.
 * Nicer lists styling.
+* Add support for admin log entries.
 
 
 0.0.11 - 2022-01-30
