@@ -6,7 +6,6 @@ from django_object_actions import DjangoObjectActions
 
 from .actions import form_processing_action, object_action, queryset_action
 from .decorators import options
-from .logging import log_action, log_addition, log_change, log_deletion
 from .widgets import (
     AdminDateRangeWidget,
     admin_detail_link,
@@ -17,7 +16,7 @@ from .widgets import (
 )
 
 
-__version__ = "0.0.12"
+__version__ = "0.0.13"
 __url__ = "https://github.com/GaretJax/django-adminutils"
 __author__ = "Jonathan Stoppani"
 __email__ = "jonathan@stoppani.name"
@@ -27,10 +26,6 @@ __all__ = [
     "formatted_json",
     "form_processing_action",
     "html_list",
-    "log_action",
-    "log_addition",
-    "log_change",
-    "log_deletion",
     "ModelAdmin",
     "object_action",
     "options",

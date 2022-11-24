@@ -2,6 +2,12 @@
 History
 =======
 
+0.0.13 - 2022-11-24
+===================
+
+* Do not make log_* functions available from the module namespace.
+
+
 0.0.12 - 2022-11-24
 ===================
 
