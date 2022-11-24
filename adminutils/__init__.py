@@ -1,11 +1,13 @@
 import copy
 
 from django.contrib import admin
+from django.contrib.postgres.fields import DateRangeField
 from django_object_actions import DjangoObjectActions
 
 from .actions import form_processing_action, object_action, queryset_action
 from .decorators import options
 from .widgets import (
+    AdminDateRangeWidget,
     admin_detail_link,
     boolean_icon_with_text,
     formatted_json,
@@ -108,6 +110,10 @@ class EditOnlyInlineMixin:
 
 
 class ModelAdmin(DjangoObjectActions, admin.ModelAdmin):
+    formfield_overrides = {
+        DateRangeField: {"widget": AdminDateRangeWidget}
+    }
+
     class Media:
         css = {
             "all": ("admin/css/overrides.css",),

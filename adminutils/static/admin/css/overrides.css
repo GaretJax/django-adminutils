@@ -26,3 +26,10 @@ body .inline-group .tabular tr.has_original td {
 .ui-sortable > tbody > tr > .djn-td.field-order {
     display: none;
 }
+
+.range-symbol {
+    padding: 0 1em;
+    display: inline-block;
+    font-size: 1.3em;
+    vertical-align: -0.1em;
+}

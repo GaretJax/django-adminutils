@@ -6,6 +6,7 @@ Upcoming
 ========
 
 * Support custom action in ``admin_detail_link``.
+* Use date widget also in DateRange fields.
 
 
 0.0.11 - 2022-01-30
