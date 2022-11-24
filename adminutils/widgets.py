@@ -38,7 +38,7 @@ def html_list(items):
     items = html.format_html_join(
         "\n", "<li>{}</li>", ((str(o),) for o in items)
     )
-    return mark_safe("<ul>{items}</ul>".format(items=items))
+    return mark_safe('<ul class="list">{items}</ul>'.format(items=items))
 
 
 def formatted_json(data):

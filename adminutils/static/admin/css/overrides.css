@@ -33,3 +33,10 @@ body .inline-group .tabular tr.has_original td {
     font-size: 1.3em;
     vertical-align: -0.1em;
 }
+
+ul.list {
+	margin: 0 0 0 10px !important;
+}
+ul.list > li {
+	list-style-type: square !important;
+}
