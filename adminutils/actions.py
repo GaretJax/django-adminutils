@@ -22,16 +22,18 @@ class MethodsRequiredDecorator(object):
         return wrapper
 
 
-def require_method(method):
-    return MethodsRequiredDecorator([method])
+def require_methods(methods):
+    if not isinstance(methods, (list, tuple)):
+        methods = [methods]
+    return MethodsRequiredDecorator(methods)
 
 
 def queryset_action(func):
     return takes_instance_or_queryset(object_action(func))
 
 
-def object_action(func):
-    return require_method("POST")(func)
+def object_action(func, methods="POST"):
+    return require_methods(methods)(func)
 
 
 def form_processing_action(
