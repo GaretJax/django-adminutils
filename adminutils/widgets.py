@@ -43,13 +43,14 @@ def formatted_json(data):
     return simple_code_block(json.dumps(data, cls=DjangoJSONEncoder, indent=2))
 
 
-def admin_detail_link(instance, text=None, bold=False):
+def admin_detail_link(instance, text=None, bold=False, action="change"):
     if instance is None:
-        return u"n/a"
+        return "n/a"
     url = reverse(
-        "admin:{app_label}_{model_name}_change".format(
+        "admin:{app_label}_{model_name}_{action}".format(
             app_label=instance._meta.app_label,
             model_name=instance._meta.model_name,
+            action=action,
         ),
         args=(instance.pk,),
     )
