@@ -2,8 +2,8 @@
 History
 =======
 
-Upcoming
-========
+0.0.12 - 2022-11-24
+===================
 
 * Support custom action in ``admin_detail_link``.
 * Use date widget also in DateRange fields.
