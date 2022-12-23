@@ -7,9 +7,15 @@
   <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
   &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
   &rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+  {% if takes_object %}
+  &rsaquo; <a href="{% url opts|admin_urlname:'change' object.pk|admin_urlquote %}">{{ object|truncatewords:"18" }}</a>
+  {%  endif %}
   &rsaquo; {{ tool_label }}
   </div>
 {% endblock %}
+
+{% block content_title %}<h1>{{ tool_label }}</h1>{% endblock %}
+{% block content_subtitle %}{% if takes_object %}<h2>{{ object }}</h2>{% endif %}{% endblock %}
 
 {% block content %}
   <div id="content-main">
@@ -32,7 +38,11 @@
                   {{ field.field }}{{ field.label_tag }}
                 {% else %}
                   {{ field.label_tag }}
-                  {{ field }}
+                  {% if field.is_readonly %}
+                      <div class="readonly">{{ field.contents }}</div>
+                  {% else %}
+                      {{ field }}
+                  {% endif %}
                 {% endif %}
                 {% if field.help_text %}
                   <div class="help">{{ field.help_text|safe }}</div>
