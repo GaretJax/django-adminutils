@@ -4,6 +4,7 @@ from django import http
 from django.db import transaction
 from django.shortcuts import redirect, render
 from django_object_actions import takes_instance_or_queryset
+from django_object_actions.utils import ChangeActionView, ChangeListActionView
 
 
 class MethodsRequiredDecorator(object):
@@ -32,16 +33,35 @@ def queryset_action(func):
     return takes_instance_or_queryset(object_action(func))
 
 
-def object_action(func, methods="POST"):
+def object_action(func, methods="POST", validate=None):
     @functools.wraps(func)
     @require_methods(methods)
     def view(self, request, *args, **kwargs):
-        object_id = request.resolver_match.captured_kwargs["pk"]
-        actions = self.get_change_actions(request, object_id, form_url="")
-        tool = request.resolver_match.captured_kwargs["tool"]
-        if tool not in actions:
-            raise http.Http404("Action does not exist")
+        view = request.resolver_match.func
+        view_class = getattr(request.resolver_match.func, "view_class", None)
+
+        run_validation = validate or (
+            validate is None
+            and view_class
+            and issubclass(
+                view_class, (ChangeActionView, ChangeListActionView)
+            )
+        )
+
+        if run_validation:
+            if issubclass(view_class, ChangeActionView):
+                object_id = request.resolver_match.captured_kwargs["pk"]
+                actions = self.get_change_actions(
+                    request, object_id, form_url=""
+                )
+            elif issubclass(view_class, ChangeListActionView):
+                actions = self.get_changelist_actions(request)
+
+            tool = request.resolver_match.captured_kwargs["tool"]
+            if tool not in actions:
+                raise http.Http404("Action does not exist")
         return func(self, request, *args, **kwargs)
+
     return view
 
 
