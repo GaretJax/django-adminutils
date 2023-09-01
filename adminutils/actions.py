@@ -42,6 +42,7 @@ def object_action(func, methods="POST"):
         if tool not in actions:
             raise http.Http404("Action does not exist")
         return func(self, request, *args, **kwargs)
+
     return view
 
 

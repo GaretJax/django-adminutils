@@ -40,6 +40,10 @@ def linked_relation(
     def getter(self, obj):
         for attr in attribute_name.split("__"):
             obj = getattr(obj, attr)
+            if obj is None:
+                # Allow None values at any point in the chain
+                return None
+
         return admin_detail_link(
             obj,
             text=(

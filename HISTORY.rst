@@ -2,6 +2,11 @@
 History
 =======
 
+0.0.16 - UNRELEASED
+===================
+
+* Allow nullables in ``linked_relation`` chains.
+
 
 0.0.15 - 2022-12-23
 ===================
