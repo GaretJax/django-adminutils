@@ -2,7 +2,7 @@
 History
 =======
 
-0.0.16 - UNRELEASED
+0.0.16 - 2023-09-06
 ===================
 
 * Allow nullables in ``linked_relation`` chains.
