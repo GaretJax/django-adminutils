@@ -35,9 +35,7 @@ def boolean_icon_with_text(flag, text):
 
 
 def html_list(items):
-    items = html.format_html_join(
-        "\n", "<li>{}</li>", ((str(o),) for o in items)
-    )
+    items = html.format_html_join("\n", "<li>{}</li>", ((str(o),) for o in items))
     return mark_safe('<ul class="list">{items}</ul>'.format(items=items))
 
 

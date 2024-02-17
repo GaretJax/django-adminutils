@@ -34,9 +34,7 @@ __all__ = [
 ]
 
 
-def linked_relation(
-    attribute_name, label_attribute=None, short_description=None
-):
+def linked_relation(attribute_name, label_attribute=None, short_description=None):
     def getter(self, obj):
         for attr in attribute_name.split("__"):
             obj = getattr(obj, attr)
@@ -46,11 +44,7 @@ def linked_relation(
 
         return admin_detail_link(
             obj,
-            text=(
-                getattr(obj, label_attribute)
-                if obj and label_attribute
-                else None
-            ),
+            text=(getattr(obj, label_attribute) if obj and label_attribute else None),
         )
 
     if short_description is None:
@@ -93,16 +87,12 @@ class CreationFormAdminMixin(object):
     def get_readonly_fields(self, request, obj=None):
         if obj is None and self.creation_readonly_fields is not None:
             return self.creation_readonly_fields
-        return super(CreationFormAdminMixin, self).get_readonly_fields(
-            request, obj
-        )
+        return super(CreationFormAdminMixin, self).get_readonly_fields(request, obj)
 
     def get_form(self, request, obj=None, **kwargs):
         if obj is None and self.creation_form is not None:
             kwargs["form"] = self.creation_form
-        return super(CreationFormAdminMixin, self).get_form(
-            request, obj, **kwargs
-        )
+        return super(CreationFormAdminMixin, self).get_form(request, obj, **kwargs)
 
 
 class EditOnlyInlineMixin:

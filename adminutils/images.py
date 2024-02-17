@@ -4,13 +4,7 @@ from .widgets import styledict
 
 
 def simple_thumbnail(
-    image_or_url,
-    size,
-    *,
-    crop=True,
-    relname=None,
-    style=None,
-    image_style=None
+    image_or_url, size, *, crop=True, relname=None, style=None, image_style=None
 ):
     # TODO: Qs auth?
     if isinstance(image_or_url, str):
@@ -20,8 +14,7 @@ def simple_thumbnail(
             from easy_thumbnails.files import get_thumbnailer
         except ImportError:
             raise ImportError(
-                "Please install easy_thumbnails to use the "
-                "adminutils.images module."
+                "Please install easy_thumbnails to use the " "adminutils.images module."
             )
 
         thumbnailer = get_thumbnailer(image_or_url, relname)
@@ -80,9 +73,7 @@ def field_getter_factory(func):
             return func(obj, **kwargs)
 
         if short_description is None:
-            short_description = attribute_name.replace("__", " ").replace(
-                "_", " "
-            )
+            short_description = attribute_name.replace("__", " ").replace("_", " ")
         getter.short_description = short_description
         getter.admin_order_field = attribute_name
         return getter

@@ -37,23 +37,18 @@ def object_action(func, methods="POST", validate=None):
     @functools.wraps(func)
     @require_methods(methods)
     def view(self, request, *args, **kwargs):
-        view = request.resolver_match.func
         view_class = getattr(request.resolver_match.func, "view_class", None)
 
         run_validation = validate or (
             validate is None
             and view_class
-            and issubclass(
-                view_class, (ChangeActionView, ChangeListActionView)
-            )
+            and issubclass(view_class, (ChangeActionView, ChangeListActionView))
         )
 
         if run_validation:
             if issubclass(view_class, ChangeActionView):
                 object_id = request.resolver_match.captured_kwargs["pk"]
-                actions = self.get_change_actions(
-                    request, object_id, form_url=""
-                )
+                actions = self.get_change_actions(request, object_id, form_url="")
             elif issubclass(view_class, ChangeListActionView):
                 actions = self.get_changelist_actions(request)
 
@@ -70,7 +65,7 @@ def form_processing_action(
     *,
     takes_object=False,
     template_name="admin/generic_form.html",
-    action_label=None
+    action_label=None,
 ):
     def processor(func):
         def view(self, request, instance_or_queryset):
@@ -86,8 +81,7 @@ def form_processing_action(
                         resp = func(self, request, form)
                     if resp is None:
                         resp = redirect(
-                            "admin:%s_%s_changelist"
-                            % (opts.app_label, opts.model_name)
+                            "admin:%s_%s_changelist" % (opts.app_label, opts.model_name)
                         )
                     return resp
             else:
