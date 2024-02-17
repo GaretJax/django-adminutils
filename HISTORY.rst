@@ -2,7 +2,13 @@
 History
 =======
 
-0.0.16 - 2023-09-06
+0.0.18 - 2024-02-17
+===================
+
+* Add support for ``current_app`` when reversing admin URLs.
+
+
+0.0.17 - 2023-09-06
 ===================
 
 * Allow nullables in ``linked_relation`` chains.

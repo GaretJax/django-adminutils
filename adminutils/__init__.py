@@ -16,7 +16,7 @@ from .widgets import (
 )
 
 
-__version__ = "0.0.17"
+__version__ = "0.0.18"
 __url__ = "https://github.com/GaretJax/django-adminutils"
 __author__ = "Jonathan Stoppani"
 __email__ = "jonathan@stoppani.name"

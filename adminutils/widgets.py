@@ -43,7 +43,9 @@ def formatted_json(data):
     return simple_code_block(json.dumps(data, cls=DjangoJSONEncoder, indent=2))
 
 
-def admin_detail_link(instance, text=None, bold=False, action="change"):
+def admin_detail_link(
+    instance, text=None, bold=False, action="change", site_name="admin"
+):
     if instance is None:
         return "n/a"
     url = reverse(
@@ -53,6 +55,7 @@ def admin_detail_link(instance, text=None, bold=False, action="change"):
             action=action,
         ),
         args=(instance.pk,),
+        current_app=site_name,
     )
     text = str(instance) if text is None else text
     style = "font-weight: bold;" if bold else ""
