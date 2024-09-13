@@ -1,4 +1,5 @@
 import copy
+import threading
 
 from django.contrib import admin
 from django.contrib.postgres.fields import DateRangeField
@@ -16,7 +17,7 @@ from .widgets import (
 )
 
 
-__version__ = "0.0.18"
+__version__ = "0.0.19"
 __url__ = "https://github.com/GaretJax/django-adminutils"
 __author__ = "Jonathan Stoppani"
 __email__ = "jonathan@stoppani.name"
@@ -71,7 +72,7 @@ def pop_fields(fieldsets, fields):
     fieldsets = copy.deepcopy(fieldsets)
     for label, spec in fieldsets:
         spec["fields"] = [f for f in spec["fields"] if f not in fields]
-    return fieldsets
+    return [spec for spec in fieldsets if spec[1]["fields"]]
 
 
 class CreationFormAdminMixin(object):
@@ -107,6 +108,19 @@ class ModelAdmin(DjangoObjectActions, admin.ModelAdmin):
     formfield_overrides = {
         DateRangeField: {"widget": AdminDateRangeWidget},
     }
+
+    def __init__(self, *args, **kwargs):
+        self._request_local = threading.local()
+        self._request_local.request = None
+        super().__init__(*args, **kwargs)
+
+    @property
+    def request(self):
+        return self._request_local.request
+
+    def get_queryset(self, request):
+        self._request_local.request = request
+        return super().get_queryset(request)
 
     class Media:
         css = {

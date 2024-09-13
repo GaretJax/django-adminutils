@@ -2,6 +2,13 @@
 History
 =======
 
+0.0.19 - 2024-09-13
+===================
+
+* Save the request object on the ModelAdmin instance (useful if needed when
+  rendering fields).
+
+
 0.0.18 - 2024-02-17
 ===================
 
