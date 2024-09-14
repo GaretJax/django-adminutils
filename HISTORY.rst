@@ -2,6 +2,13 @@
 History
 =======
 
+0.0.20 - 2024-09-14
+===================
+
+* Support arguments to the `object_action` decorator.
+* Allow the buttons to be hidden from the admin interface.
+
+
 0.0.19 - 2024-09-13
 ===================
 

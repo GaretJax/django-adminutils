@@ -33,7 +33,12 @@ def queryset_action(func):
     return takes_instance_or_queryset(object_action(func))
 
 
-def object_action(func, methods="POST", validate=None):
+def object_action(func=None, *, methods="POST", validate=None, hide_button=False):
+    if not func:
+        return functools.partial(
+            object_action, methods=methods, validate=validate, hide_button=hide_button
+        )
+
     @functools.wraps(func)
     @require_methods(methods)
     def view(self, request, *args, **kwargs):
@@ -57,6 +62,7 @@ def object_action(func, methods="POST", validate=None):
                 raise http.Http404("Action does not exist")
         return func(self, request, *args, **kwargs)
 
+    view.attrs = {"show_button": not hide_button}
     return view
 
 
