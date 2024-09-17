@@ -74,6 +74,7 @@ def form_processing_action(
     action_label=None,
 ):
     def processor(func):
+        @functools.wraps(func)
         def view(self, request, instance_or_queryset):
             opts = self.model._meta
             kwargs = {"instance": instance_or_queryset} if takes_object else {}
@@ -108,9 +109,9 @@ def form_processing_action(
                 },
             )
 
-        view.attrs = {"use_form": False}
         if takes_object:
             view = object_action(view, methods=["GET", "POST"])
+        view.attrs = {"use_form": False}
         return view
 
     return processor

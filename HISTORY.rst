@@ -2,6 +2,13 @@
 History
 =======
 
+0.0.21 - 2024-09-18
+===================
+
+* Add ability to hide button in the UI.
+* Update styles and HTML for Django 5.
+
+
 0.0.20 - 2024-09-14
 ===================
 
