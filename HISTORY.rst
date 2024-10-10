@@ -2,6 +2,17 @@
 History
 =======
 
+0.0.22 - 2024-10-10
+===================
+
+* Let the ``form_processing_action`` decorator also support pure Django
+  changelist actions.
+* Support multiple Django admin sites in ``form_processing_action``.
+* Wrap the form fields in the default template used by
+  ``form_processing_action`` in a block named ``formfields``.
+* ``form_processing_action`` now also passes the object or queryset as second
+  argument to the decorated actions.
+
 0.0.21 - 2024-09-18
 ===================
 
@@ -12,7 +23,7 @@ History
 0.0.20 - 2024-09-14
 ===================
 
-* Support arguments to the `object_action` decorator.
+* Support arguments to the ``object_action`` decorator.
 * Allow the buttons to be hidden from the admin interface.
 
 

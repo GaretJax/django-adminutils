@@ -2,6 +2,7 @@ import functools
 
 from django import http
 from django.db import transaction
+from django.contrib.admin import helpers
 from django.shortcuts import redirect, render
 from django_object_actions import takes_instance_or_queryset
 from django_object_actions.utils import ChangeActionView, ChangeListActionView
@@ -78,17 +79,53 @@ def form_processing_action(
         def view(self, request, instance_or_queryset):
             opts = self.model._meta
             kwargs = {"instance": instance_or_queryset} if takes_object else {}
-            tool = getattr(self, request.resolver_match.kwargs["tool"])
-            tool_label = getattr(tool, "label")
 
-            if request.method == "POST":
+            try:
+                tool_id = request.resolver_match.kwargs["tool"]
+            except KeyError:
+                # There can be multiple action forms on the page (at the top
+                # and bottom of the change list, for example). Get the action
+                # whose button was pushed.
+                try:
+                    action_index = int(request.POST.get("index", 0))
+                except ValueError:
+                    action_index = 0
+                data = request.POST.copy()
+                data.pop(helpers.ACTION_CHECKBOX_NAME, None)
+                data.pop("index", None)
+
+                # Use the action whose button was pushed
+                try:
+                    data.update({"action": data.getlist("action")[action_index]})
+                except IndexError:
+                    # If we didn't get an action from the chosen form that's invalid
+                    # POST data, so by deleting action it'll fail the validation check
+                    # below. So no need to do anything here
+                    pass
+                action_form = self.action_form(data, auto_id=None)
+                action_form.fields["action"].choices = self.get_action_choices(request)
+
+                assert action_form.is_valid()  # Has already been validated once by django
+
+                tool_id = action_form.cleaned_data["action"]
+                select_across = action_form.cleaned_data["select_across"]
+                is_changelist_action = True
+            else:
+                is_changelist_action = False
+                select_across = False
+                action_index = 0
+
+            tool = getattr(self, tool_id)
+            tool_label = getattr(tool, "label", tool_id)
+
+            if request.method == "POST" and "_submit" in request.POST:
                 form = form_class(request.POST, request.FILES, **kwargs)
                 if form.is_valid():
                     with transaction.atomic():
-                        resp = func(self, request, form)
+                        resp = func(self, request, instance_or_queryset, form)
                     if resp is None:
                         resp = redirect(
-                            "admin:%s_%s_changelist" % (opts.app_label, opts.model_name)
+                            f"{self.admin_site.name}:{opts.app_label}_{opts.model_name}_changelist"
                         )
                     return resp
             else:
@@ -102,10 +139,15 @@ def form_processing_action(
                     "form": form,
                     "opts": opts,
                     "takes_object": takes_object,
-                    "object": instance_or_queryset if takes_object else None,
+                    "object" if takes_object else "queryset": instance_or_queryset,
                     "app_label": opts.app_label,
                     "tool_label": tool_label,
+                    "tool_id": tool_id,
                     "action_label": action_label,
+                    "action_checkbox_name": helpers.ACTION_CHECKBOX_NAME,
+                    "is_changelist_action": is_changelist_action,
+                    "action_index": action_index,
+                    "select_across": select_across,
                 },
             )
 

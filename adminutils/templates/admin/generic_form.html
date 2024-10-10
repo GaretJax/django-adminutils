@@ -1,6 +1,6 @@
 {% extends "admin/change_form.html" %}
 
-{% load i18n admin_urls static %}
+{% load l10n i18n admin_urls static %}
 
 {% block breadcrumbs %}
   <div class="breadcrumbs">
@@ -21,6 +21,14 @@
   <div id="content-main">
     <form enctype="multipart/form-data" action="" method="post" id="{{ opts.model_name }}_form" novalidate>
       {% csrf_token %}
+      {% if is_changelist_action %}
+        <input type="hidden" name="action" value="{{ tool_id }}" />
+        <input type="hidden" name="select_across" value="{% if select_across %}1{% else %}0{% endif %}" />
+        <input type="hidden" name="index" value="{{ action_index }}" />
+        {% for obj in queryset %}
+          <input type="hidden" name="{{ action_checkbox_name }}" value="{{ obj.pk|unlocalize }}">
+        {% endfor %}
+      {% endif %}
       <div>
         {% if form.errors %}
           <p class="errornote">
@@ -29,33 +37,35 @@
           {{ adminform.form.non_field_errors }}
         {% endif %}
 
-        <fieldset class="module aligned">
-          {% for field in form %}
-            <div class="form-row{% if field.errors %} errors{% endif %}{% if field.name %} field-{{ field.name }}{% endif %}">
-              <div{% if field.is_checkbox %} class="checkbox-row"{% endif %}>
-                {{ field.errors }}
-                <div class="flex-container">
-                  {% if field.is_checkbox %}
-                    {{ field.field }}{{ field.label_tag }}
-                  {% else %}
-                    {{ field.label_tag }}
-                    {% if field.is_readonly %}
-                        <div class="readonly">{{ field.contents }}</div>
+        {% block formfields %}
+          <fieldset class="module aligned">
+            {% for field in form %}
+              <div class="form-row{% if field.errors %} errors{% endif %}{% if field.name %} field-{{ field.name }}{% endif %}">
+                <div{% if field.is_checkbox %} class="checkbox-row"{% endif %}>
+                  {{ field.errors }}
+                  <div class="flex-container">
+                    {% if field.is_checkbox %}
+                      {{ field.field }}{{ field.label_tag }}
                     {% else %}
-                        {{ field }}
+                      {{ field.label_tag }}
+                      {% if field.is_readonly %}
+                          <div class="readonly">{{ field.contents }}</div>
+                      {% else %}
+                          {{ field }}
+                      {% endif %}
                     {% endif %}
+                  </div>
+                  {% if field.help_text %}
+                    <div class="help">{{ field.help_text|safe }}</div>
                   {% endif %}
                 </div>
-                {% if field.help_text %}
-                  <div class="help">{{ field.help_text|safe }}</div>
-                {% endif %}
               </div>
-            </div>
-          {% endfor %}
-        </fieldset>
+            {% endfor %}
+          </fieldset>
+        {% endblock %}
 
         <div class="submit-row">
-          <input type="submit" value="{{ action_label|default:_("Save") }}" class="default" name="_save">
+          <input type="submit" value="{{ action_label|default:_("Save") }}" class="default" name="_submit">
         </div>
       </div>
     </form>
