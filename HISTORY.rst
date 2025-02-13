@@ -2,6 +2,13 @@
 History
 =======
 
+0.0.23 - 2025-02-13
+===================
+
+* Properly include forms media in generic admin form action template.
+* Redirect form actions to detail view if ``takes_object=True``.
+
+
 0.0.22 - 2024-10-10
 ===================
 
@@ -12,6 +19,7 @@ History
   ``form_processing_action`` in a block named ``formfields``.
 * ``form_processing_action`` now also passes the object or queryset as second
   argument to the decorated actions.
+
 
 0.0.21 - 2024-09-18
 ===================
