@@ -1,9 +1,10 @@
 import functools
 
 from django import http
+from django.urls import reverse
 from django.db import transaction
 from django.contrib.admin import helpers
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django_object_actions import takes_instance_or_queryset
 from django_object_actions.utils import ChangeActionView, ChangeListActionView
 
@@ -105,7 +106,9 @@ def form_processing_action(
                 action_form = self.action_form(data, auto_id=None)
                 action_form.fields["action"].choices = self.get_action_choices(request)
 
-                assert action_form.is_valid()  # Has already been validated once by django
+                assert (
+                    action_form.is_valid()
+                )  # Has already been validated once by django
 
                 tool_id = action_form.cleaned_data["action"]
                 select_across = action_form.cleaned_data["select_across"]
@@ -124,9 +127,18 @@ def form_processing_action(
                     with transaction.atomic():
                         resp = func(self, request, instance_or_queryset, form)
                     if resp is None:
-                        resp = redirect(
-                            f"{self.admin_site.name}:{opts.app_label}_{opts.model_name}_changelist"
-                        )
+                        if takes_object:
+                            url = reverse(
+                                f"admin:{opts.app_label}_{opts.model_name}_change",
+                                args=(instance_or_queryset.pk,),
+                                current_app=self.admin_site.name,
+                            )
+                        else:
+                            url = reverse(
+                                f"admin:{opts.app_label}_{opts.model_name}_changelist",
+                                current_app=self.admin_site.name,
+                            )
+                        resp = http.HttpResponseRedirect(url)
                     return resp
             else:
                 form = form_class(**kwargs)
